@@ -424,23 +424,45 @@ def main():
     else:
         transactionid = args.transactionid
         uri = uriname + ":" + pubaddr + "?" + "transaction=" + transactionid
-        
-    
+    dn = ""
+    dn_c = raw_input("Please enter Country (eg: US): ")
+    if (dn_c == ""):
+        dn_c = "US"
+    dn_st = raw_input("Please enter State (eg: California): ")
+    if (dn_st == ""):
+        dn_st = "California"
+    dn_l = raw_input("Please enter City (eg: Sunnyvale): ")
+    if (dn_l == ""):
+        dn_l = "Sunnyvale"
+    dn_o = raw_input("Please enter Organization (eg: Widgets Inc.): ")
+    if (dn_o == ""):
+        dn_o = "Widgets Inc."
+    dn_ou = raw_input("Please enter Organization Unit: (eg: Information Security): ")
+    if (dn_ou == ""):
+        dn_ou = "Information Security"
+    dn_cn = raw_input("Please enter Common Name: (eg: My first UTXOC): ")
+    if (dn_cn == ""):
+        dn_cn = "My first UTXOC"
+    san = raw_input("Please enter Subject Alt Name values (DNS name, blank for none, seperate multiple entries with space): ")
+    sanentry = []
+    if (san == ""):
+        sanentry = 'URI:%s' % uri
+    else:
+        for entry in san.split(" "):
+            sanentry.append('DNS:%s' % entry)
+        sanentry.append('URI:%s' % uri)
+    dn = "/C=" + dn_c + "/ST=" + dn_st + "/L=" + dn_l + "/O=" + dn_o + "/OU=" + dn_ou + "/CN=" + dn_cn
 
-    
-    
     attributes={
         'extensionRequest': (
             ('x509basicConstraints', True,
              (False,)),
             ('subjectAlternativeName', False,
-             ('URI:%s' % uri)
+             sanentry
             ),
         )
     }
 
-
-    dn = "/C=AU/ST=South Australia/L=Adelaide/O=MiWCryptoCurrency/OU=Cryptography and Cryptocurrency/CN=UTXOC Root Certificate"
     create_csr_ec(parsed_key, dn, csrfilename=out, attributes=attributes, network=network)
 
 if __name__ == "__main__":
