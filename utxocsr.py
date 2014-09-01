@@ -409,13 +409,17 @@ def main():
 
     if (network=="BTC"):
         uriname = "bitcoin"
-    if (network=="NMC"):
+    elif (network=="NMC"):
         uriname = "namecoin"
-    if (network=="LTC"):
+    elif (network=="LTC"):
         uriname = "litecoin"
+    elif (network=="DOGE"):
+        uriname = "dogecoin"
+    elif (network=="BLK"):
+        uriname = "blackcoin"
 
     if not args.transactionid:
-        print "Please enter transaction id to reference in certificate. Leave blank to only encode the address."
+        print "Please enter transaction hash to reference in certificate. Leave blank to only encode the address."
         transactionid = raw_input()
         if transactionid == "":
             uri = uriname + ":" + pubaddr

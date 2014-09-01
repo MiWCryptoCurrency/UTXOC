@@ -1,0 +1,84 @@
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            a4:fd:eb:9f:a4:51:b9:6c:11:56:ca:60:20:74:87:d1:68:74:61:62:e4:f8:5c:a7:e9:4d:46:ac:d0:12:0f:c7
+    Signature Algorithm: ecdsa-with-SHA256
+        Issuer: C=AU, ST=South Australia, L=Adelaide, O=MiWCryptoCurrency, OU=Cryptography and Cryptocurrency, CN=UTXOC Root Certificate
+        Validity
+            Not Before: Aug 30 20:06:51 2014 GMT
+            Not After : Aug 30 20:06:51 2015 GMT
+        Subject: C=US, ST=California, L=Sunnyvale, O=Widgets Inc., OU=Information Security, CN=Such first Dogecoin UTXOC, Wow!
+        Subject Public Key Info:
+            Public Key Algorithm: id-ecPublicKey
+                Public-Key: (256 bit)
+                pub: 
+                    04:5d:da:fc:ab:99:63:ea:46:b4:b9:25:bd:09:b1:
+                    a8:ef:96:d9:2f:3e:ef:93:c3:a1:1f:a2:5f:08:99:
+                    de:a7:fa:a6:6f:46:fd:89:af:ba:b8:ac:47:dd:bb:
+                    6b:99:1f:06:b4:bd:ca:9b:e7:5d:ba:d5:53:80:85:
+                    f3:c4:22:85:27
+                ASN1 OID: secp256k1
+        X509v3 extensions:
+            X509v3 Subject Key Identifier: 
+                C8:79:BD:46:BE:DC:FD:69:CA:00:6B:E9:BD:E2:FA:D6:93:B3:1D:8B
+            X509v3 Authority Key Identifier: 
+                keyid:47:1F:C6:94:93:63:6F:33:6C:95:F9:6E:6A:96:B0:EA:4C:44:E4:6F
+
+            Netscape Base Url: 
+                https://www.github.com/MiwCryptoCurrency/UTXOC
+            X509v3 Key Usage: 
+                Digital Signature, Non Repudiation, Key Agreement, Certificate Sign, CRL Sign
+            Authority Information Access: 
+                CA Issuers - URI:https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOC-CA.crt
+
+            X509v3 CRL Distribution Points: 
+
+                Full Name:
+                  URI:https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOC-CA.crl
+
+            X509v3 Certificate Policies: 
+                Policy: X509v3 Any Policy
+                  CPS: https://github.com/MiWCryptoCurrency/UTXOC/blob/master/Policy.md
+                  User Notice:
+                    Organization: MiWCryptoCurrency
+                    Number: 1
+                    Explicit Text: UTXO Certificate
+
+            X509v3 Basic Constraints: critical
+                CA:FALSE
+            X509v3 Subject Alternative Name: 
+                URI:dogecoin:DJ1hB1KbbcM3dU1P29app9yuwJ6XPRCx7L?transaction=605fa72ebb97373e12ba004ec444c9d8268346be186d954b967dd9008f4d7079
+    Signature Algorithm: ecdsa-with-SHA256
+         30:44:02:20:68:25:b4:1a:19:92:49:93:3a:ef:8a:67:dd:56:
+         33:00:ac:bb:c8:4c:8a:b8:05:95:cf:2c:3f:e6:d0:db:63:be:
+         02:20:7c:66:f9:4e:21:94:0d:6b:7a:9d:5b:47:ad:4a:0c:00:
+         db:bd:4a:16:14:7c:33:7b:5e:29:15:0d:26:1a:19:c9
+-----BEGIN CERTIFICATE-----
+MIIExjCCBG2gAwIBAgIhAKT965+kUblsEVbKYCB0h9FodGFi5Phcp+lNRqzQEg/H
+MAoGCCqGSM49BAMCMIGhMQswCQYDVQQGEwJBVTEYMBYGA1UECAwPU291dGggQXVz
+dHJhbGlhMREwDwYDVQQHDAhBZGVsYWlkZTEaMBgGA1UECgwRTWlXQ3J5cHRvQ3Vy
+cmVuY3kxKDAmBgNVBAsMH0NyeXB0b2dyYXBoeSBhbmQgQ3J5cHRvY3VycmVuY3kx
+HzAdBgNVBAMMFlVUWE9DIFJvb3QgQ2VydGlmaWNhdGUwHhcNMTQwODMwMjAwNjUx
+WhcNMTUwODMwMjAwNjUxWjCBljELMAkGA1UEBhMCVVMxEzARBgNVBAgMCkNhbGlm
+b3JuaWExEjAQBgNVBAcMCVN1bm55dmFsZTEVMBMGA1UECgwMV2lkZ2V0cyBJbmMu
+MR0wGwYDVQQLDBRJbmZvcm1hdGlvbiBTZWN1cml0eTEoMCYGA1UEAwwfU3VjaCBm
+aXJzdCBEb2dlY29pbiBVVFhPQywgV293ITBWMBAGByqGSM49AgEGBSuBBAAKA0IA
+BF3a/KuZY+pGtLklvQmxqO+W2S8+75PDoR+iXwiZ3qf6pm9G/YmvurisR927a5kf
+BrS9ypvnXbrVU4CF88QihSejggKAMIICfDAdBgNVHQ4EFgQUyHm9Rr7c/WnKAGvp
+veL61pOzHYswHwYDVR0jBBgwFoAURx/GlJNjbzNslfluapaw6kxE5G8wPQYJYIZI
+AYb4QgECBDAWLmh0dHBzOi8vd3d3LmdpdGh1Yi5jb20vTWl3Q3J5cHRvQ3VycmVu
+Y3kvVVRYT0MwCwYDVR0PBAQDAgHOMF8GCCsGAQUFBwEBBFMwUTBPBggrBgEFBQcw
+AoZDaHR0cHM6Ly9naXRodWIuY29tL01pV0NyeXB0b0N1cnJlbmN5L1VUWE9DL2Js
+b2IvbWFzdGVyL1VUWE9DLUNBLmNydDBUBgNVHR8ETTBLMEmgR6BFhkNodHRwczov
+L2dpdGh1Yi5jb20vTWlXQ3J5cHRvQ3VycmVuY3kvVVRYT0MvYmxvYi9tYXN0ZXIv
+VVRYT0MtQ0EuY3JsMIGfBgNVHSAEgZcwgZQwgZEGBFUdIAAwgYgwTAYIKwYBBQUH
+AgEWQGh0dHBzOi8vZ2l0aHViLmNvbS9NaVdDcnlwdG9DdXJyZW5jeS9VVFhPQy9i
+bG9iL21hc3Rlci9Qb2xpY3kubWQwOAYIKwYBBQUHAgIwLDAYGhFNaVdDcnlwdG9D
+dXJyZW5jeTADAgEBGhBVVFhPIENlcnRpZmljYXRlMA8GA1UdEwEB/wQFMAMBAQAw
+gYMGA1UdEQR8MHqGeGRvZ2Vjb2luOkRKMWhCMUtiYmNNM2RVMVAyOWFwcDl5dXdK
+NlhQUkN4N0w/dHJhbnNhY3Rpb249NjA1ZmE3MmViYjk3MzczZTEyYmEwMDRlYzQ0
+NGM5ZDgyNjgzNDZiZTE4NmQ5NTRiOTY3ZGQ5MDA4ZjRkNzA3OTAKBggqhkjOPQQD
+AgNHADBEAiBoJbQaGZJJkzrvimfdVjMArLvITIq4BZXPLD/m0NtjvgIgfGb5TiGU
+DWt6nVtHrUoMANu9ShYUfDN7XikVDSYaGck=
+-----END CERTIFICATE-----

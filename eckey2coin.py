@@ -133,6 +133,7 @@ def main():
     parser.add_argument('-n', "--network", help='specify network (default: BTC = Bitcoin)',
                                 default='BTC', choices=NETWORK_NAMES)
     args = parser.parse_args()
+    network = args.network
     inputprivatekey = ''
     if args.key:
         keyfile = args.key        
@@ -149,7 +150,7 @@ def main():
             if not line: break
             inputprivatekey += line + '\n'
     if not args.qrfilename:
-        qrfilename = raw_input("Please enter qrcode output filename:\n")
+        qrfilename = raw_input("Please enter qrcode output filename: ")
     else:
         qrfilename = args.qrfilename
     pkey = decoder.decode(read_pem(inputprivatekey), asn1Spec=ECPrivateKey())
@@ -160,7 +161,7 @@ def main():
     print "Key Validated OK"
     inputkey = encoding.to_long(256, pycoin.encoding.byte_to_int, pkey[0][1].asOctets())[0]
     if inputkey:
-        key = Key(secret_exponent=inputkey, netcode="BTC")
+        key = Key(secret_exponent=inputkey, netcode=network)
         btcsecret = key.secret_exponent()
         btcpublic = key.public_pair()
         hash160_c = key.hash160(use_uncompressed=False)
