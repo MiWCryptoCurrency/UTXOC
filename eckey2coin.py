@@ -129,7 +129,7 @@ def main():
                 + ', '.join(['%s (%s)'%(i, full_network_name_for_netcode(i)) for i in NETWORK_NAMES])
     )
     parser.add_argument('-k', '--key', required=False, type=argparse.FileType('r'), help='The EC private key in PEM format')
-    parser.add_argument('-q', '--qrfilename', required=False, type=argparse.FileType('w'), help='QR code of public address')
+    parser.add_argument('-q', '--qrfilename', required=False, help='QR code output filename')
     parser.add_argument('-n', "--network", help='specify network (default: BTC = Bitcoin)',
                                 default='BTC', choices=NETWORK_NAMES)
     args = parser.parse_args()
