@@ -2,7 +2,7 @@
 ## CC BY-SA 3.0
 ##
 ## Uses code from https://github.com/jandd/python-pkiutils/blob/master/pkiutils/__init__.py pure python pkiutils
-# http://www.ietf.org/rfc/rfc5480.txt is your friend (EC public key format)
+## http://www.ietf.org/rfc/rfc5480.txt is your friend (EC public key format)
 ## also RFC3279 http://www.ietf.org/rfc/rfc3279.txt
 ##
 ##
@@ -21,21 +21,19 @@ from pyasn1.type import univ, namedtype, namedval, constraint, tag
 from pyasn1_modules import rfc2314
 from pycoin.serialize import b2h, h2b
 from pycoin.key import Key
-from pycoin.key.bip32 import Wallet
 from pycoin.networks import full_network_name_for_netcode, NETWORK_NAMES
 from pycoin import encoding
 import pkiutils
 import binascii
-# also http://tools.ietf.org/html/rfc5754 RFC 5754 with SHA2
-# http://tools.ietf.org/html/rfc5758 RFC 5758 x509 additional identifiers for ECDSA
-# https://github.com/coruus/pyasn1-modules/blob/master/pyasn1_modules/rfc2459.py
-# x509 objects
+## local utility class
+## gives us OIDs and PEM parsing
+import utility
+## also http://tools.ietf.org/html/rfc5754 RFC 5754 with SHA2
+## http://tools.ietf.org/html/rfc5758 RFC 5758 x509 additional identifiers for ECDSA
+## https://github.com/coruus/pyasn1-modules/blob/master/pyasn1_modules/rfc2459.py
+## x509 objects
 
-OID_SECP256K1 = univ.ObjectIdentifier("1.3.132.0.10")
-OID_ecdsaWithSHA256 = univ.ObjectIdentifier("1.2.840.10045.4.3.2")
-OID_idEcPublicKey = univ.ObjectIdentifier("1.2.840.10045.2.1")
-OID_PKCS9_EXT_REQUEST= univ.ObjectIdentifier('1.2.840.113549.1.9.14')
-OID_eku = univ.ObjectIdentifier('2.5.29.37')
+
 ##
 ## AlgorithmIdentifier  ::=  SEQUENCE  {
 ##        algorithm   OBJECT IDENTIFIER,
@@ -77,25 +75,7 @@ class ECDSASigValue(univ.Sequence):
         namedtype.NamedType('s', univ.Integer())
         )
 
-## RFC 5915 EC
-##  ECPrivateKey ::= SEQUENCE {
-##     version        INTEGER { ecPrivkeyVer1(1) } (ecPrivkeyVer1),
-##     privateKey     OCTET STRING,
-##     parameters [0] ECParameters {{ NamedCurve }} OPTIONAL,
-##     publicKey  [1] BIT STRING OPTIONAL
-##}
     
-class ECPrivateKey(univ.Sequence):
-    componentType = namedtype.NamedTypes(
-        namedtype.NamedType('version', univ.Integer()),
-        namedtype.NamedType('privateKey', univ.OctetString()),
-        namedtype.NamedType('namedCurve', univ.ObjectIdentifier().subtype(
-        explicitTag=tag.Tag(tag.tagClassContext,
-            tag.tagFormatSimple, 0))),
-        namedtype.NamedType('publicKey', univ.BitString().subtype(
-            implicitTag=tag.Tag(tag.tagClassContext,
-                tag.tagFormatSimple, 1)))
-        )
 
 class curve(univ.Sequence):
 
@@ -119,40 +99,18 @@ def isValidECKey(privatekey):
     if (len(privatekey[1]) * 8) < 256:
         print "Key is too small! Must be 256 bit"
         return False
-    if not (privatekey[2] == OID_SECP256K1):
+    if not (privatekey[2] == utility.OID_SECP256K1):
         print "Curve is not SECP256K1 (bitcoin, et al.)"
         return False
     return True
-
-def read_pem(input):
-    """Read PEM formatted input."""
-    data = []
-    state = 0
-    for line in input.split('\n'):
-        line.split('\n')
-        if state == 0:
-            if line.startswith('-----BEGIN EC PRIVATE'):
-                state = 1
-        elif state == 1:
-            if line.startswith('-----END EC PRIVATE'):
-                state = 2
-            else:
-                data.append(line)
-        elif state == 2:
-            break
-    if state != 2:
-        raise ValueError, 'No PEM encoded input found'
-    data = ''.join(data)
-    data = data.decode('base64')
-    return data
 
 def _build_subject_publickey_info(key):
     pubkeybitstring = key[0].getComponentByPosition(3)
     algorithm = univ.Sequence()
     algorithm.setComponentByPosition(
-        0, OID_idEcPublicKey)
+        0, utility.OID_idEcPublicKey)
     algorithm.setComponentByPosition(
-        1, OID_SECP256K1)
+        1, utility.OID_SECP256K1)
     subjectPublicKeyInfo = SubjectPublicKeyInfo()
     subjectPublicKeyInfo.setComponentByName(
         'algorithm', algorithm)
@@ -182,23 +140,23 @@ def randomsign(generator, secret_exponent, val):
 
 def _build_signature(key, certreqinfo, network):
     secret_exponent = encoding.to_long(256, encoding.byte_to_int, key[0][1].asOctets())[0]
-    #signer = SigningKey.from_secret_exponent(secret_exponent, curve=ecdsa.curves.SECP256k1, hashfunc=sha256)
     coin  = Key(secret_exponent=secret_exponent, netcode=network)
-    print "building signature for %s address" % network
-    print coin.address()
+    print "building signature for %s address: %s" % (network, coin.address())
     pubkeybitstring = (key[0].getComponentByPosition(2), key[0].getComponentByPosition(3))
     certreqinfoder = encoder.encode(certreqinfo)
     hashvalue = SHA256.new(certreqinfoder)
-    hexdgst = hashvalue.hexdigest()
     dgst = hashvalue.digest()
     dgstaslong = encoding.to_long(256, encoding.byte_to_int, dgst)[0]
     order2 = pycoin.ecdsa.generator_secp256k1.order()
-    # random sign
-    rawsig2 = randomsign(pycoin.ecdsa.generator_secp256k1, secret_exponent, dgstaslong)
-    # deterministic sign
-    #rawsig2 = pycoin.ecdsa.sign(pycoin.ecdsa.generator_secp256k1, secret_exponent, dgstaslong)
+    ## random sign
+    generator = pycoin.ecdsa.generator_secp256k1
+    rawsig2 = randomsign(generator, secret_exponent, dgstaslong)
+    ## deterministic sign
+    ##rawsig2 = pycoin.ecdsa.sign(pycoin.ecdsa.generator_secp256k1, secret_exponent, dgstaslong)
     r2, s2 = rawsig2
     print "signature: r: %x s: %x" % (r2, s2)
+    if not pycoin.ecdsa.verify(generator, coin.public_pair(), dgstaslong, rawsig2):
+        raise SignatureVerifyException("Generated signature r: %x s: %x does not verify against public key %s" % (r2, s2, public_pair))
     signature = ECDSASigValue()
     signature.setComponentByName('r', r2)
     signature.setComponentByName('s', s2)
@@ -217,7 +175,7 @@ def _build_dn(dnspec):
             if pair.find('=') >= 0:
                 key, value = pair.split('=', 1)
                 dndict.append((key,value))
-    # put components in correct order
+    ## put components in correct order
     
     dnparts = rfc2314.RDNSequence()
     count = 0
@@ -336,7 +294,7 @@ def _build_attributes(attributes, attrtype):
 def _build_attribute(key, value):
     SUPPORTED_ATTRIBUTES = {
         'extensionRequest': (
-            OID_PKCS9_EXT_REQUEST, _build_extension_request),
+            utility.OID_PKCS9_EXT_REQUEST, _build_extension_request),
     }
     if key in SUPPORTED_ATTRIBUTES:
         attroid, builder = SUPPORTED_ATTRIBUTES[key]
@@ -367,7 +325,7 @@ def create_csr_ec(key, dn, network, csrfilename=None, attributes=None ):
     certreq.setComponentByName('certificationRequestInfo', certreqInfo)
     sigAlgIdentifier = rfc2314.SignatureAlgorithmIdentifier()
     sigAlgIdentifier.setComponentByName(
-        'algorithm',OID_ecdsaWithSHA256)
+        'algorithm',utility.OID_ecdsaWithSHA256)
     certreq.setComponentByName(
         'signatureAlgorithm',
         sigAlgIdentifier)
@@ -399,10 +357,7 @@ def main():
             line = args.key.readline().strip()
             if not line: break
             inputkey += line + '\n'
-    parsed_key = decoder.decode(read_pem(inputkey), asn1Spec=ECPrivateKey())
-    #print parsed_key
-    
-    
+    parsed_key = decoder.decode(utility.read_ec_private_pem(inputkey), asn1Spec=utility.ECPrivateKey())
     secret_exponent = encoding.to_long(256, encoding.byte_to_int, parsed_key[0][1].asOctets())[0]
     coin  = Key(secret_exponent=secret_exponent, netcode=network)
     pubaddr = coin.address(use_uncompressed=False)
