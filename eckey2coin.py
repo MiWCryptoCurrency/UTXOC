@@ -45,12 +45,9 @@ from pyasn1.type import univ, namedtype, namedval, constraint, tag
 from pycoin.ecdsa import is_public_pair_valid, generator_secp256k1, public_pair_for_x, secp256k1
 from pycoin.serialize import b2h, h2b
 from pycoin.key import Key
-from pycoin.key.bip32 import Wallet
 from pycoin.networks import full_network_name_for_netcode, NETWORK_NAMES
 from pycoin import encoding
 import qrcode
-#from pyasn1 import debug
-# debug.setLogger(debug.Debug('all'))
 
 class ECPrivateKey(univ.Sequence):
     componentType = namedtype.NamedTypes(
