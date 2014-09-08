@@ -14,6 +14,7 @@
 ## also Standards in Efficent Cryptography SEC 1: Elliptic Curve Cryptography has useful bits on bitstring to octetstring in 2.3.3
 
 
+import utility
 import sys
 import pycoin
 import datetime
@@ -25,7 +26,6 @@ from pyasn1.type import univ, namedtype, namedval, constraint, tag, useful
 from Crypto.Hash import SHA256
 from pycoin.serialize import b2h, h2b
 from pycoin.key import Key
-from pycoin.key.bip32 import Wallet
 from pycoin.networks import full_network_name_for_netcode, NETWORK_NAMES
 from pycoin.ecdsa.secp256k1 import generator_secp256k1
 from pycoin.encoding import from_long, from_bytes_32, byte_to_int
@@ -36,6 +36,7 @@ from math import ceil, log
 from pyasn1_modules import rfc2459
 import requests
 import json
+
 
 #globals!
 trusted_signer_list = {}
@@ -248,7 +249,7 @@ def subjectPublicKeyInfoToPublicPair(subjectpublickeyinfo):
     if not checkCurveSecp256k1(subjectpublickeyinfo):
         return None
     
-    pubkey = bitStringtoOctetString(certpublickey)
+    pubkey = utility.bitStringtoOctetString(certpublickey)
     hstr = ""
     for hchar in pubkey:
         hstr+=binascii.hexlify(hchar)
