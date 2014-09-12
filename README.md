@@ -24,8 +24,15 @@ Additionally it provides a bearer bond type construction that can be used with
 existing x509 infrastructure and devices such as elliptic curve smart cards; and
 proof of ownership signatures can be made without the official wallet software.
 
-Discussion Paper: https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOCv1.pdf?raw=true
+A traditional x509 trust chain can be created between signer and request with these certificates.
+Subject and Issuer values are encoded in standard certificate form and can be added to compliant
+Operating System or or Browser trust stores.
 
+Our first UTXOC Root CA Certificate was signed Friday, 25 July 2014 4:07:06 AM and as published 
+https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOC-CA.crt
+The TX referenced in the certificate spent 0.01 BTC (~$60 USD in July 2014) and the bond is held for 10 years.
+
+[Discussion Paper](https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOCv1.pdf?raw=true)
 
 Things you will need:
 * openssl (usually with Linux and OSX; Windows binaries from Shining Light Productions)
@@ -117,14 +124,14 @@ Future applications for public key cryptosystems!
 
 How to generate a Self-Signed UTXOC (CryptoCurrency Bond) [commands only]:
 ---------------------------------------------------------------------------
-
+`
 openssl ecparam -out myUTXOC.key -name secp256k1 -genkey 
 {remove ec params section from key file}
 python eckey2coin.py -k myUTXOC.key -n BTC -q myUTXOC.png
 python utxocsr.py -k myUTXOC.key -f myUTXOC.csr -n BTC -t ##################tx-hash-goes-here#############################
 python utxocsign.py -k myUTXOC.key -c myUTXOC.csr -f myUTXOC.crt -d 365 -n BTC
 python verifyutxoc.py -f myUTXOC.crt
-
+`
 
 
 
