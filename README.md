@@ -34,7 +34,7 @@ Operating System or or Browser trust stores.
 Our first UTXOC Root CA Certificate was signed Friday, 25 July 2014 4:07:06 AM and as published at
 ```
 https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOC-CA.crt
-The TX referenced in the certificate has0.01 BTC unspent (~$60 USD in July 2014)
+The TX referenced in the certificate has0.01 BTC unspent (~$6 USD in July 2014)
 and the bond is held for 10 years. (10 year validity, expires 22/07/2024)
 ```
 
