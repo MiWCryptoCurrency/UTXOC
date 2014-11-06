@@ -364,7 +364,7 @@ def checkBlockchainInfoUTXO(coinaddress, txid):
             ## check out output is for the address in the SAN
             if not (txo['addr'] == coinaddress):
                 continue
-            ## is it unspent? blockchain.info "spent" == false means unspent
+            ## is it unspent? blockchain.info "spent" == False means unspent
             if (txo['spent'] == True):
                 print "TX is spent! Certificate invalid!"
                 return False
@@ -497,7 +497,6 @@ def main():
 
     ###############################
     ## Is our transaction unspent? Using blockchain.info API and chain.so data API to validate Unspent.
-    ## TODO should use multiple sources or wallet client, additional coins
     print "-- Check 3: Is the transaction unspent? --"
     utxo_valid = False
     ## dont forget to check the txid just in case its something malicious smuggled in through the cert and passed to requests
@@ -516,8 +515,8 @@ def main():
     ## use ??? for BLK
     ## use ??? for NMC
     if (netcode=='BTC'):
-        utxo_valid = checkBlockchainInfoUTXO(coinaddress, txid)
-        utxo_valid = checkChainSoUTXO(netcode, coinaddress, txid)
+        if checkBlockchainInfoUTXO(coinaddress, txid) and checkChainSoUTXO(netcode, coinaddress, txid):
+            utxo_valid = True
     elif (netcode=='DOGE') or (netcode=='LTC'):
         utxo_valid = checkChainSoUTXO(netcode, coinaddress, txid)
     else:
