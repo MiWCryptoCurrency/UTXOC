@@ -354,19 +354,18 @@ def checkBlockchainInfoUTXO(coinaddress, txid):
         txtime = txjson["time"]
         txout = txjson["out"]
         txblock = txjson["block_height"]
-
         ## check the txhash matches the cert
         ## (this is validating the json data more than anything, 
         if not (txhash == txid):
-            "Print hash in json data does not match hash in certificate!"
+            print "hash in json data does not match hash in certificate!"
             return False
         ## check the outputs
         for txo in txout:
             ## check out output is for the address in the SAN
             if not (txo['addr'] == coinaddress):
                 continue
-            ## is it unspent? blockchain.info spent == true means unspent
-            if (txo['spent'] == False):
+            ## is it unspent? blockchain.info "spent" == false means unspent
+            if (txo['spent'] == True):
                 print "TX is spent! Certificate invalid!"
                 return False
             else:
@@ -518,7 +517,7 @@ def main():
     ## use ??? for NMC
     if (netcode=='BTC'):
         utxo_valid = checkBlockchainInfoUTXO(coinaddress, txid)
-        #utxo_valid = checkChainSoUTXO(netcode, coinaddress, txid)
+        utxo_valid = checkChainSoUTXO(netcode, coinaddress, txid)
     elif (netcode=='DOGE') or (netcode=='LTC'):
         utxo_valid = checkChainSoUTXO(netcode, coinaddress, txid)
     else:
