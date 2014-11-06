@@ -10,10 +10,12 @@ certificates have additional explicit value by merit that they prove ownership o
 decentralised bitcoin-like value. This construction has been formatively titled
 Unspent TransaXtion Output Certificate or UTXOC, pronounced ‘you-chi-ock’.
 
+
 What does this provide in addition to
 every-day Trusted CA Certified certificates
 we know and love from such trusted
 names as Honest Achmed and Diginotar?
+
 
 By generating an x509 certificate that uses this key, one can
 explicitly reference the transaction in which some value was transered to this
@@ -28,9 +30,13 @@ A traditional x509 trust chain can be created between signer and request with th
 Subject and Issuer values are encoded in standard certificate form and can be added to compliant
 Operating System or or Browser trust stores.
 
-Our first UTXOC Root CA Certificate was signed Friday, 25 July 2014 4:07:06 AM and as published 
+
+Our first UTXOC Root CA Certificate was signed Friday, 25 July 2014 4:07:06 AM and as published at
+```
 https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOC-CA.crt
-The TX referenced in the certificate spent 0.01 BTC (~$60 USD in July 2014) and the bond is held for 10 years.
+The TX referenced in the certificate has0.01 BTC unspent (~$6 USD in July 2014)
+and the bond is held for 10 years. (10 year validity, expires 22/07/2024)
+```
 
 [Discussion Paper](https://github.com/MiWCryptoCurrency/UTXOC/blob/master/UTXOCv1.pdf?raw=true)
 
@@ -52,7 +58,7 @@ Things you will need:
 How to generate a Self-Signed UTXOC (CryptoCurrency Bond) [learning way]:
 -----------------------------------------------------------------------------
 
-1. Generate Key
+##Generate Key
 first generate your EC (elliptic curve) private key over secp256k1
 
 This is just a very big number between 1 and (almost) 2^256.
@@ -71,67 +77,67 @@ ie: bitcoin, litecoin, dogecoin
 
 There are many ways to generate a large number (our EC private key) as randomly (unpredictably) as possible,
 but for now we use openssl:
-
+```
 openssl ecparam -out myUTXOC.key -name secp256k1 -genkey
-
+```
 clean this file so that it only contains the headings and text between 
 -----BEGIN EC PRIVATE KEY----- and -----END EC PRIVATE KEY-----
 Dont worry! The -----BEGIN EC PARAMETERS----- section is stored implicitly in the EC PRIVATE KEY SECTION.
 
-2. Convert key to coin
+##Convert key to coin
 use the eckey2coin.py script to write this as coin address, and generate a QR code for you.
 
 You may wish to store the line containing the wif, or wallet import format, value somewhere safe.
 This code will allow you import this key into any wallet software and spend any balance associated with the address.
 It will also let you claim the value after the certificate has expired.
-
+```
 python eckey2coin.py -k myUTXOC.key -n BTC -q myUTXOC.png
+```
+##Load the key with value
+Initiate a transaction on the network that spends some value to the address displayed by eckey2coin.py or in the QR code it generated.
+That transaction hash will be the included in the certificate signing request.
 
-3. Load the key with value
-initiate a transaction on the network that spends some value to the address. this txid (hash) will be the included 
-in the certificate signing request.
-
-4. Check the transaction has been accepted, and confirmed by the network.
+##Check the transaction has been accepted, and confirmed by the network.
 Copy the transaction hash.
 
-5. Generate the signing request
-
-python utxocsr.py -k myUTXOC.key -f myUTXOC.csr -n BTC -t ##################tx-hash-goes-here#############################
+##Generate the signing request
+```
+python utxocsr.py -k myUTXOC.key -f myUTXOC.csr -n BTC -t #################tx-hash-goes-here#############################
+```
 
 This will generate you a signing request with the specified subject, and calculate a SubjectAltName to identify the coin address
 and transaction.
 
-6. Sign the signing request
-
+##Sign the signing request
+```
 python utxocsign.py -k myUTXOC.key -c myUTXOC.csr -f myUTXOC.crt -d 365 -n BTC
-
+```
 This will output the file myUTXOC.crt; which should be a valid UTXOC. You can verify the validity of this, or any other UTXOC encoded
 this way with the verifyutxoc.py script.
 
-7. Verify the certificate
-
+##Verify the certificate
+```
 python verifyutxoc.py -f myUTXOC.crt
-
-8. Share your certificate file as proof of bond.
+```
+##Share your certificate file as proof of bond
 The certificate is considered valid as long as the transaction it references is not claimed until the end of the validity period.
 Examples of use:
-TLS Server Authentication, ie: https www server
-TLS Client Authentication, browser client
-Code Signing, ie Operating System or Application binaries on a trusted platform
-File encryption keys, File system encryption keys
-Future applications for public key cryptosystems!
-
+* TLS Server Authentication, ie: https www server
+* TLS Client Authentication, browser client
+* Code Signing, ie Operating System or Application binaries on a trusted platform
+* File encryption keys, File system encryption keys
+* Future applications for public key cryptosystems!
 
 How to generate a Self-Signed UTXOC (CryptoCurrency Bond) [commands only]:
 ---------------------------------------------------------------------------
-`
+```
 openssl ecparam -out myUTXOC.key -name secp256k1 -genkey 
 {remove ec params section from key file}
 python eckey2coin.py -k myUTXOC.key -n BTC -q myUTXOC.png
 python utxocsr.py -k myUTXOC.key -f myUTXOC.csr -n BTC -t ##################tx-hash-goes-here#############################
 python utxocsign.py -k myUTXOC.key -c myUTXOC.csr -f myUTXOC.crt -d 365 -n BTC
 python verifyutxoc.py -f myUTXOC.crt
-`
+```
 
 
 
